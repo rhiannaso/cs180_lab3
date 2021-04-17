@@ -177,8 +177,9 @@ public:
 				c = 0;
          //vector dot
 				for(int j = 0; j < 4; ++j) {
-            // IMPLEMENT ME
+                    c += (A[i+4*j]*B[k*4+j]);
 				}
+                C[i+4*k] = c;
 			}
 		}
 	}
@@ -304,7 +305,21 @@ public:
 		createIdentityMat(M);
 		//createIdentityMat(V);
         createTranslateMat(V, 0, 0, -6);
-        createRotateMatY(M, 0.5);
+        //createRotateMatY(M, 0.5);
+        float cubeTrans[16] = {0};
+        float cubeScale[16] = {0};
+        createScaleMat(cubeScale, 2, 1, 1);
+        createTranslateMat(cubeTrans, 2, 0, 0);
+        multMat(M, cubeTrans, cubeScale);
+
+        float A[16], B[16], C[16];
+        for(int i = 0; i < 16; ++i) { A[i] = i; }
+        for(int i = 0; i < 16; ++i) { B[i] = i*i; } 
+
+        multMat(C, A, B);
+        printMat(A, "A");
+        printMat(B, "B");
+        printMat(C, "C"); 
 
 		// Draw mesh using GLSL.
 		prog->bind();

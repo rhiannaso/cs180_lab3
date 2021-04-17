@@ -304,22 +304,19 @@ public:
 		createPerspectiveMat(P, 70.0f, aspect, 0.1, 100.0f);	
 		createIdentityMat(M);
 		//createIdentityMat(V);
-        createTranslateMat(V, 0, 0, -6);
+        float globalTrans[16] = {0};
+		float globalRotate[16] = {0};
+        createTranslateMat(globalTrans, 0, 0, -6);
+        createRotateMatY(globalRotate, -0.5);
+        multMat(V, globalTrans, globalRotate);
         //createRotateMatY(M, 0.5);
         float cubeTrans[16] = {0};
         float cubeScale[16] = {0};
-        createScaleMat(cubeScale, 2, 1, 1);
-        createTranslateMat(cubeTrans, 2, 0, 0);
+
+        // Draw first vertical line of H
+        createScaleMat(cubeScale, 0.75, 4.5, 0.7);
+        createTranslateMat(cubeTrans, -2.2, 0, 0);
         multMat(M, cubeTrans, cubeScale);
-
-        float A[16], B[16], C[16];
-        for(int i = 0; i < 16; ++i) { A[i] = i; }
-        for(int i = 0; i < 16; ++i) { B[i] = i*i; } 
-
-        multMat(C, A, B);
-        printMat(A, "A");
-        printMat(B, "B");
-        printMat(C, "C"); 
 
 		// Draw mesh using GLSL.
 		prog->bind();
@@ -329,6 +326,54 @@ public:
 		mesh->draw(prog);
 		prog->unbind();
 
+        // Draw second vertical line of H
+        createScaleMat(cubeScale, 0.75, 4.5, 0.7);
+        createTranslateMat(cubeTrans, -0.75, 0, 0);
+        multMat(M, cubeTrans, cubeScale);
+
+        prog->bind();
+		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
+		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, V);
+		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, M);
+		mesh->draw(prog);
+		prog->unbind();
+
+        // Draw vertical line of I
+        createScaleMat(cubeScale, 0.75, 4.5, 0.7);
+        createTranslateMat(cubeTrans, 0.75, 0, 0);
+        multMat(M, cubeTrans, cubeScale);
+
+        prog->bind();
+		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
+		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, V);
+		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, M);
+		mesh->draw(prog);
+		prog->unbind();
+
+        // Draw slanted line of H
+        float cubeRotate[16] = {0};
+        float temp[16] = {0};
+        // createRotateMatZ(cubeRotate, -0.55);
+
+        // createScaleMat(cubeScale, 2.7, 0.6, 0.7);
+        // createTranslateMat(cubeTrans, -1.5, 0.25, 0);
+        // multMat(M, cubeRotate, cubeScale);
+        // multMat(finalProd, cubeTrans, M);
+
+        createRotateMatZ(cubeRotate, -0.55);
+
+        createScaleMat(cubeScale, 2.75, 0.6, 0.7);
+        createTranslateMat(cubeTrans, -1.35, -0.6, 0);
+
+        multMat(temp, cubeTrans, cubeScale);
+        multMat(M, cubeRotate, temp);
+
+        prog->bind();
+		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);
+		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, V);
+		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, M);
+		mesh->draw(prog);
+		prog->unbind();
 	}
 };
 

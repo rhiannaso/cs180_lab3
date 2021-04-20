@@ -353,20 +353,12 @@ public:
         // Draw slanted line of H
         float cubeRotate[16] = {0};
         float temp[16] = {0};
-        // createRotateMatZ(cubeRotate, -0.55);
-
-        // createScaleMat(cubeScale, 2.7, 0.6, 0.7);
-        // createTranslateMat(cubeTrans, -1.5, 0.25, 0);
-        // multMat(M, cubeRotate, cubeScale);
-        // multMat(finalProd, cubeTrans, M);
-
         createRotateMatZ(cubeRotate, -0.55);
 
-        createScaleMat(cubeScale, 2.75, 0.6, 0.7);
-        createTranslateMat(cubeTrans, -1.35, -0.6, 0);
-
-        multMat(temp, cubeTrans, cubeScale);
-        multMat(M, cubeRotate, temp);
+        createScaleMat(cubeScale, 2.7, 0.6, 0.7);
+        createTranslateMat(cubeTrans, -1.5, 0.25, 0);
+        multMat(temp, cubeRotate, cubeScale);
+        multMat(M, cubeTrans, temp);
 
         prog->bind();
 		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, P);

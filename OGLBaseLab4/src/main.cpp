@@ -303,13 +303,11 @@ public:
 		float aspect = width/(float)height;
 		createPerspectiveMat(P, 70.0f, aspect, 0.1, 100.0f);	
 		createIdentityMat(M);
-		//createIdentityMat(V);
         float globalTrans[16] = {0};
 		float globalRotate[16] = {0};
         createTranslateMat(globalTrans, 0, 0, -6);
         createRotateMatY(globalRotate, -0.5);
         multMat(V, globalTrans, globalRotate);
-        //createRotateMatY(M, 0.5);
         float cubeTrans[16] = {0};
         float cubeScale[16] = {0};
 
